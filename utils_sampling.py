@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Classes for (1) marginal and (2) conditional sampling for the IMAGENET data.
+Classes for (1) marginal and (2) conditional sampling.
 
 Note that every sampler has to implement the method
     get_samples(sampleIndices, featVect, numSamples)
@@ -16,7 +16,7 @@ import utils_data as utlD
 import utils_classifiers as utlC
 
 
-class marg_sampler_imagenet:
+class marg_sampler:
     '''
     Marginal sampler for image patches
     '''
@@ -25,7 +25,7 @@ class marg_sampler_imagenet:
         '''
         Sampler to draw marginal samples
         Input:
-                X       imagenet data from which we will take our samples
+                X       data from which we will take our samples
                         for the feature values
         '''
         # we will use raveled arrays for each image
@@ -47,7 +47,7 @@ class marg_sampler_imagenet:
         return np.take(self.X[:numSamples], sampleIndices.ravel(), axis=1)
 
 
-class cond_sampler_imagenet:
+class cond_sampler:
     '''
     Conditional sampler for image patches
     using a multivariate Gaussian distribution
@@ -119,6 +119,7 @@ class cond_sampler_imagenet:
                 net = utlC.get_network(self.netname)
 
                 # get the imagenet data
+                # XXX:FIXME
                 X, _, _ = utlD.get_imagenet_data(net)
 
                 # get samples for fitting the distribution
@@ -327,6 +328,7 @@ def save_minmax_values(netname):
     sampler so that we don't have overflowing values)
     '''
     net = utlC.get_network(netname)
+    # XXX: FIXME
     X, _, _ = utlD.get_imagenet_data(net)
     minMaxVals = np.zeros((2,3,X.shape[-1],X.shape[-1]))
     minMaxVals[0] = np.min(X,axis=0)

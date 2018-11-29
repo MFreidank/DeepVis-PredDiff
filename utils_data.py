@@ -2,9 +2,9 @@
 """
 
 Utility methods for handling the ImageNet data:
-    get_imagenet_data(net, preprocess)
-    get_imagenet_classnames()
-    
+    get_cifar10_data(net, preprocess)
+    get_cifar10_classnames()
+
 """
 
 import numpy as np
@@ -18,10 +18,10 @@ path_data = "./data"
 def get_imagenet_data(net):
     """
     Returns a small dataset of ImageNet data.
-    Input:  
+    Input:
             net         a neural network (caffe model)
     Output:
-            X           the feature values, in a matrix 
+            X           the feature values, in a matrix
                         (numDatapoints, [imageDimensions])
             X_im        the features as uint8 values, to display
                         using plt.imshow()
@@ -35,7 +35,7 @@ def get_imagenet_data(net):
     for img_file in img_list[:]:
         if not (img_file.endswith(".png") or img_file.endswith(".jpg")):
             img_list.remove(img_file)
-        
+
     # fill up data matrix
     img_dim = net.crop_dims
     X = np.empty((0, img_dim[0], img_dim[1], 3))
@@ -54,16 +54,19 @@ def get_imagenet_data(net):
 
     # cast to image values that can be displayed directly with plt.imshow()
     X_im = np.uint8(X)
-        
+
     # preprocess
     X_pre = np.zeros((X.shape[0], 3, img_dim[0], img_dim[1]))
     for i in range(num_imgs):
         X_pre[i] = net.transformer.preprocess('data', X[i])
     X = X_pre
-        
+
     return X, X_im, X_filenames
 
 
-def get_imagenet_classnames():
-    """ Returns the classnames of all 1000 ImageNet classes """
-    return np.loadtxt(open(path_data+'/ilsvrc_2012_labels.txt'), dtype=object, delimiter='\n')
+def get_cifar10_data():
+    raise NotImplementedError
+
+def get_cifar10_classnames():
+    return ("airplane", "automobile", "bird", "cat", "deer",
+            "dog", "frog", "horse", "ship", "truck")
