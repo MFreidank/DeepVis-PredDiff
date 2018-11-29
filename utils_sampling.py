@@ -119,8 +119,8 @@ class cond_sampler:
                 net = utlC.get_network(self.netname)
 
                 # get the imagenet data
-                # XXX:FIXME
-                X, _, _ = utlD.get_imagenet_data(net)
+                X, *_ = utlD.get_cifar10_data(net)
+                # X, _, _ = utlD.get_imagenet_data(net)
 
                 # get samples for fitting the distribution
                 patchesMat = np.empty((0,self.patchSize*self.patchSize), dtype=np.float)
@@ -328,8 +328,8 @@ def save_minmax_values(netname):
     sampler so that we don't have overflowing values)
     '''
     net = utlC.get_network(netname)
-    # XXX: FIXME
-    X, _, _ = utlD.get_imagenet_data(net)
+    X, *_ = utlD.get_cifar10_data(net)
+    # X, _, _ = utlD.get_imagenet_data(net)
     minMaxVals = np.zeros((2,3,X.shape[-1],X.shape[-1]))
     minMaxVals[0] = np.min(X,axis=0)
     minMaxVals[1] = np.max(X,axis=0)
